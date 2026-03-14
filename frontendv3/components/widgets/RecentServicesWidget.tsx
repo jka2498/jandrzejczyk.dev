@@ -12,15 +12,20 @@ const iconMap: Record<string, React.ReactNode> = {
   Globe: <Globe size={20} />,
 };
 
-const RecentServicesWidget: React.FC = () => {
+interface RecentServicesWidgetProps {
+  onNavigate?: (serviceId: string) => void;
+}
+
+const RecentServicesWidget: React.FC<RecentServicesWidgetProps> = ({ onNavigate }) => {
   return (
     <Card title="Recently visited">
       {/* Increased grid columns for large screens to 3 since this widget now spans 2/3 of the page */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-2 gap-x-8">
         {RECENT_SERVICES.map((service) => (
-          <div 
-            key={service.id} 
+          <div
+            key={service.id}
             className="group flex items-start gap-3 p-2 rounded hover:bg-[#232f3e] cursor-pointer transition-colors border border-transparent hover:border-slate-600"
+            onClick={() => onNavigate?.(service.id)}
           >
             <div className="mt-0.5 p-1.5 rounded bg-slate-800 text-orange-500 group-hover:text-orange-400 group-hover:bg-slate-700">
               {iconMap[service.icon]}

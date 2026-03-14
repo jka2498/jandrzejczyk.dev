@@ -83,3 +83,38 @@ export interface ServiceLink {
   icon: string;
   description: string;
 }
+
+export interface EducationRecord {
+  id: string;
+  institution: string;
+  degree: string;
+  field: string;
+  startYear: number;
+  endYear: number;
+  grade: string;
+  status: 'available' | 'stopped';
+  engine: string;
+  instanceClass: string;
+  az: string;
+  modules: string[];
+  tags: Record<string, string>;
+}
+
+export interface DnsRecord {
+  name: string;
+  type: 'A' | 'CNAME' | 'MX' | 'TXT' | 'NS' | 'SOA';
+  value: string;
+  ttl: number;
+  status: 'INSYNC' | 'PENDING';
+  description: string;
+  href?: string;
+}
+
+export interface HostedZone {
+  id: string;
+  domainName: string;
+  description: string;
+  recordCount: number;
+  type: 'Public' | 'Private';
+  records: DnsRecord[];
+}

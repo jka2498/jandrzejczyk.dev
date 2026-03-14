@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, Bell, Settings, HelpCircle, Grid, Linkedin } from 'lucide-react';
+import InfoModal from './InfoModal';
 
 const Navbar: React.FC = () => {
+  const [showInfo, setShowInfo] = useState(false);
+
   return (
     <nav className="bg-[#232f3e] text-white h-[52px] flex items-center px-4 justify-between fixed w-full top-0 z-50 shadow-md">
       <div className="flex items-center gap-4">
@@ -30,7 +33,7 @@ const Navbar: React.FC = () => {
             <Linkedin size={18} />
         </a>
         <button className="hover:text-white"><Bell size={18} /></button>
-        <button className="hover:text-white"><HelpCircle size={18} /></button>
+        <button className="hover:text-white" onClick={() => setShowInfo(true)}><HelpCircle size={18} /></button>
         <button className="hover:text-white"><Settings size={18} /></button>
         
         <div className="flex items-center gap-2 px-2 py-1 hover:bg-slate-700 rounded cursor-pointer border border-transparent hover:border-gray-500 transition-colors">
@@ -42,6 +45,7 @@ const Navbar: React.FC = () => {
           <span className="font-medium text-white">Global</span>
         </div>
       </div>
+      <InfoModal open={showInfo} onClose={() => setShowInfo(false)} />
     </nav>
   );
 };

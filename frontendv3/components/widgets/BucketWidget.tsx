@@ -1,15 +1,16 @@
 import React from 'react';
-import { useProjects } from '../../hooks/useProjects';
 import { Project } from '../../types';
 import Card from '../Card';
 import { Folder, Search, Loader2 } from 'lucide-react';
 
 interface S3WidgetProps {
   onProjectClick?: (project: Project) => void;
+  projects: Project[];
+  loading: boolean;
+  error: string | null;
 }
 
-const S3Widget: React.FC<S3WidgetProps> = ({ onProjectClick }) => {
-  const { projects, loading, error } = useProjects();
+const S3Widget: React.FC<S3WidgetProps> = ({ onProjectClick, projects, loading, error }) => {
 
   return (
     <Card 

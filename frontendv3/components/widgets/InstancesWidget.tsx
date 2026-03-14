@@ -1,15 +1,16 @@
 import React from 'react';
-import { useExperiences } from '../../hooks/useExperiences';
 import { Experience } from '../../types';
 import Card from '../Card';
 import { Loader2, AlertCircle } from 'lucide-react';
 
 interface EC2WidgetProps {
   onRowClick?: (experience: Experience) => void;
+  experiences: Experience[];
+  loading: boolean;
+  error: string | null;
 }
 
-const EC2Widget: React.FC<EC2WidgetProps> = ({ onRowClick }) => {
-  const { experiences, loading, error } = useExperiences();
+const EC2Widget: React.FC<EC2WidgetProps> = ({ onRowClick, experiences, loading, error }) => {
 
   return (
     <Card 

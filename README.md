@@ -88,7 +88,7 @@ cdk deploy --all # deploy all stacks
 ```bash
 cd scripts
 pip install -r requirements.txt
-python seed_experiencess.py
+python seed_experiences.py
 ```
 
 ## CDK Stacks

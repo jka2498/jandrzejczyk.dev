@@ -5,6 +5,7 @@ import software.amazon.awscdk.aws_apigatewayv2_integrations.HttpLambdaIntegratio
 import software.amazon.awscdk.services.apigatewayv2.AddRoutesOptions;
 import software.amazon.awscdk.services.apigatewayv2.CorsPreflightOptions;
 import software.amazon.awscdk.services.apigatewayv2.HttpApi;
+import software.amazon.awscdk.services.apigatewayv2.CfnStage;
 import software.amazon.awscdk.services.apigatewayv2.HttpMethod;
 import software.amazon.awscdk.services.dynamodb.Attribute;
 import software.amazon.awscdk.services.dynamodb.AttributeType;
@@ -169,6 +170,13 @@ public class PortfolioStack extends Stack {
                     .integration(
                             new HttpLambdaIntegration("GetCvDownloadUrlIntegration", getCvDownloadUrlFunction))
                     .build());
+
+    // ------------------------------------------------------------
+    // API Gateway: stage-level throttling (10 req/s, burst 20)
+    // ------------------------------------------------------------
+    CfnStage cfnStage = (CfnStage) api.getDefaultStage().getNode().getDefaultChild();
+    cfnStage.addPropertyOverride("DefaultRouteSettings.ThrottlingBurstLimit", 20);
+    cfnStage.addPropertyOverride("DefaultRouteSettings.ThrottlingRateLimit", 10);
 
     CfnOutput.Builder.create(this, "CvBucketName")
             .value(cvBucket.getBucketName())

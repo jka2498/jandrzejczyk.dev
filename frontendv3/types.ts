@@ -15,7 +15,7 @@ export interface ExperienceDTO {
 
 export type ProjectLifecycle = 'ACTIVE' | 'ARCHIVED';
 export type ProjectAccess = 'PUBLIC' | 'PRIVATE';
-export type ProjectServiceType = 'S3' | 'DynamoDB' | 'Lambda' | (string & {});
+export type ProjectServiceType = 'Storage' | 'Database' | 'Functions' | (string & {});
 
 export interface ProjectDTO {
   id: string;

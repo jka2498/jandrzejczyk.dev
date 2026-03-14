@@ -36,7 +36,19 @@ function adaptExperience(dto: ExperienceDTO): Experience {
   };
 }
 
-// Transform API Project to UI Project (S3 Bucket)
+// Map API service types to generic display names
+const SERVICE_TYPE_MAP: Record<string, string> = {
+  'S3': 'Storage',
+  'DynamoDB': 'Database',
+  'Lambda': 'Functions',
+};
+
+function mapServiceType(apiType?: string): string {
+  if (!apiType) return 'Storage';
+  return SERVICE_TYPE_MAP[apiType] || apiType;
+}
+
+// Transform API Project to UI Project (Storage Bucket)
 function adaptProject(dto: ProjectDTO): Project {
   // Generate some fake objects so the UI isn't empty
   const mockObjects: ProjectObject[] = [
@@ -54,12 +66,12 @@ function adaptProject(dto: ProjectDTO): Project {
     lastModified: `${dto.createdYear || '2024'}-Present`,
     size: 'Standard',
     description: dto.description || 'No description provided.',
-    arn: `arn:jan:s3:::${dto.name.toLowerCase().replace(/\s+/g, '-')}`,
+    arn: `rn:jan:storage:::${dto.name.toLowerCase().replace(/\s+/g, '-')}`,
     creationDate: new Date(dto.createdYear ? `${dto.createdYear}-01-01` : Date.now()).toUTCString(),
     objects: mockObjects,
     githubUrl: dto.githubUrl,
     tags: {
-      'Service': dto.serviceType || 'S3',
+      'Service': mapServiceType(dto.serviceType),
       'Lifecycle': dto.lifecycle,
       'Organization': dto.organization || 'Personal',
       'Stack': techStack,

@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from '../Card';
 import { useCv } from '../../hooks/useCv';
-import { Shield, Users, Key, AlertTriangle, Download, Linkedin, ExternalLink, Loader2 } from 'lucide-react';
+import { Shield, Users, Key, AlertTriangle, Download, Linkedin, Github, ExternalLink, Loader2 } from 'lucide-react';
 
 const IAMWidget: React.FC = () => {
   const { cvUrl, loading, loadCvUrl } = useCv();
@@ -90,6 +90,13 @@ const IAMWidget: React.FC = () => {
                 <div className="flex items-center gap-2">
                     <Linkedin size={16} className="text-blue-500" />
                     <span className="text-sm text-gray-300 group-hover:text-white">LinkedIn</span>
+                </div>
+                <ExternalLink size={12} className="text-gray-500 group-hover:text-cyan-500" />
+             </a>
+             <a href="https://github.com/jka2498" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-2 rounded hover:bg-[#1f2937] transition-colors group cursor-pointer border border-transparent hover:border-slate-600">
+                <div className="flex items-center gap-2">
+                    <Github size={16} className="text-gray-300" />
+                    <span className="text-sm text-gray-300 group-hover:text-white">GitHub</span>
                 </div>
                 <ExternalLink size={12} className="text-gray-500 group-hover:text-cyan-500" />
              </a>

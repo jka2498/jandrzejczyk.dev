@@ -5,7 +5,7 @@ import { Server, HardDrive, Shield, Activity, Database, Globe } from 'lucide-rea
 
 export const SKILL_DATA: SkillPoint[] = [
   { name: 'Java', usage: 95, forecast: 98 },
-  { name: 'AWS', usage: 90, forecast: 95 },
+  { name: 'Cloud', usage: 90, forecast: 95 },
   { name: 'Spring Boot', usage: 85, forecast: 90 },
   { name: 'Terraform', usage: 80, forecast: 85 },
   { name: 'Python', usage: 75, forecast: 80 },

@@ -32,7 +32,7 @@ const BucketDetails: React.FC<BucketDetailsProps> = ({ project, onBack }) => {
       {/* Breadcrumb & Header */}
       <div className="mb-4">
         <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-           <span className="hover:text-cyan-500 cursor-pointer" onClick={onBack}>Amazon S3</span>
+           <span className="hover:text-cyan-500 cursor-pointer" onClick={onBack}>Object Storage</span>
            <span>{'>'}</span>
            <span className="hover:text-cyan-500 cursor-pointer" onClick={onBack}>Buckets</span>
            <span>{'>'}</span>
@@ -81,7 +81,7 @@ const BucketDetails: React.FC<BucketDetailsProps> = ({ project, onBack }) => {
                          <RefreshCw size={14} />
                      </button>
                      <button className="bg-white text-gray-900 font-bold px-3 py-1.5 rounded text-xs border border-gray-300 hover:bg-gray-100 flex items-center gap-1 disabled:opacity-50">
-                         <Copy size={14} /> Copy S3 URI
+                         <Copy size={14} /> Copy Storage URI
                      </button>
                      <button className="bg-white text-gray-900 font-bold px-3 py-1.5 rounded text-xs border border-gray-300 hover:bg-gray-100 flex items-center gap-1 disabled:opacity-50">
                          <Copy size={14} /> Copy URL
@@ -109,7 +109,7 @@ const BucketDetails: React.FC<BucketDetailsProps> = ({ project, onBack }) => {
 
                  {/* S3 Search / Filter */}
                  <div className="space-y-2">
-                     <p className="text-gray-400 text-xs">Objects are the fundamental entities stored in Amazon S3. You can use <span className="text-cyan-500 underline">Amazon S3 inventory</span> to list all objects.</p>
+                     <p className="text-gray-400 text-xs">Objects are the fundamental entities stored in buckets. You can use <span className="text-cyan-500 underline">bucket inventory</span> to list all objects.</p>
                      
                      <div className="flex gap-4">
                          <div className="relative flex-1">

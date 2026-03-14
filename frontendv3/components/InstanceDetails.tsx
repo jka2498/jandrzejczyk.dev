@@ -17,7 +17,7 @@ const InstanceDetails: React.FC<InstanceDetailsProps> = ({ instance, onBack }) =
       {/* Breadcrumb & Header */}
       <div className="mb-4">
         <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-           <span className="hover:text-cyan-500 cursor-pointer" onClick={onBack}>EC2</span>
+           <span className="hover:text-cyan-500 cursor-pointer" onClick={onBack}>Compute</span>
            <span>{'>'}</span>
            <span className="hover:text-cyan-500 cursor-pointer" onClick={onBack}>Instances</span>
            <span>{'>'}</span>
@@ -144,7 +144,7 @@ const InstanceDetails: React.FC<InstanceDetailsProps> = ({ instance, onBack }) =
                         </div>
                          <div>
                             <div className="text-xs text-gray-500 mb-0.5">Private IP DNS name (IPv4 only)</div>
-                            <div className="text-sm text-gray-200 font-mono">ip-111-22-333-444.{instance.az}.compute.internal</div>
+                            <div className="text-sm text-gray-200 font-mono">ip-111-22-333-444.{instance.az}.internal</div>
                         </div>
                         <div>
                             <div className="text-xs text-gray-500 mb-0.5">Instance type</div>
@@ -162,8 +162,8 @@ const InstanceDetails: React.FC<InstanceDetailsProps> = ({ instance, onBack }) =
                             </div>
                         </div>
                          <div>
-                            <div className="text-xs text-gray-500 mb-0.5">VPC ID</div>
-                            <div className="text-sm text-cyan-500 cursor-pointer hover:underline">vpc-01a112a22b334cdd5</div>
+                            <div className="text-xs text-gray-500 mb-0.5">Network ID</div>
+                            <div className="text-sm text-cyan-500 cursor-pointer hover:underline">net-01a112a22b334cdd5</div>
                         </div>
                         <div>
                             <div className="text-xs text-gray-500 mb-0.5">Subnet ID</div>
@@ -178,8 +178,8 @@ const InstanceDetails: React.FC<InstanceDetailsProps> = ({ instance, onBack }) =
                             <div className="text-sm text-gray-200">{instance.tags['Platform'] || 'Linux/UNIX'}</div>
                         </div>
                         <div>
-                            <div className="text-xs text-gray-500 mb-0.5">AMI ID</div>
-                            <div className="text-sm text-cyan-500 cursor-pointer hover:underline">ami-01a112a22b334cdd5</div>
+                            <div className="text-xs text-gray-500 mb-0.5">Image ID</div>
+                            <div className="text-sm text-cyan-500 cursor-pointer hover:underline">img-01a112a22b334cdd5</div>
                         </div>
                         <div>
                             <div className="text-xs text-gray-500 mb-0.5">Monitoring</div>

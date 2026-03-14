@@ -31,10 +31,10 @@ const HealthWidget: React.FC = () => {
                 <div>
                     <h4 className="text-sm font-semibold text-gray-200">Scheduled Changes</h4>
                     <p className="text-xs text-gray-400 mt-1">
-                        Recent certification: <span className="text-cyan-500 cursor-pointer hover:underline">AWS Certified Developer Associate</span>.
+                        Recent certification: <a href="https://cp.certmetrics.com/amazon/en/public/verify/credential/f6939570e9d14323ab14c16a11d76f59" target="_blank" rel="noopener noreferrer" className="text-cyan-500 cursor-pointer hover:underline">AWS Certified Developer Associate</a>.
                     </p>
                     <p className="text-xs text-gray-400 mt-1">
-                        Upcoming certification: <span className="text-cyan-500 cursor-pointer hover:underline">AWS Certified AI Practioner</span>.
+                        Upcoming certification: <a href="https://aws.amazon.com/certification/certified-ai-practitioner/" target="_blank" rel="noopener noreferrer" className="text-cyan-500 cursor-pointer hover:underline">AWS Certified AI Practitioner</a>.
                     </p>
                 </div>
              </div>

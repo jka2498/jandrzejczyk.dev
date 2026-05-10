@@ -5,16 +5,15 @@ import InstanceDetails from './components/InstanceDetails';
 import BucketDetails from './components/BucketDetails';
 import DatabaseDetails from './components/DatabaseDetails';
 import DnsDetails from './components/DnsDetails';
+import IAMDetails from './components/IAMDetails';
 import { useExperiences } from './hooks/useExperiences';
 import { useProjects } from './hooks/useProjects';
 import { Experience, Project } from './types';
 
-type ActivePage = 'db' | 'dns' | null;
+type ActivePage = 'db' | 'dns' | 'iam' | null;
 
 const SCROLL_TARGETS: Record<string, string> = {
-  instance: 'widget-instances',
   bucket: 'widget-buckets',
-  iam: 'widget-iam',
   cost: 'widget-cost',
 };
 
@@ -33,45 +32,66 @@ const App: React.FC = () => {
   };
 
   const handleNavigate = (serviceId: string) => {
-    if (serviceId === 'db' || serviceId === 'dns') {
+    setSelectedInstance(null);
+    setSelectedProject(null);
+    if (serviceId === 'db' || serviceId === 'dns' || serviceId === 'iam') {
       setActivePage(serviceId);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (serviceId === 'instance' && experiences.length > 0) {
+      setActivePage(null);
+      const targetId = 'widget-instances';
+      requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' }));
     } else {
+      setActivePage(null);
       const targetId = SCROLL_TARGETS[serviceId];
       if (targetId) {
-        document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+        requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' }));
       }
     }
   };
 
+  const activeServiceId: string | null = selectedInstance
+    ? 'instance'
+    : selectedProject
+    ? 'bucket'
+    : activePage === 'db'
+    ? 'db'
+    : activePage === 'dns'
+    ? 'dns'
+    : activePage === 'iam'
+    ? 'iam'
+    : null;
+
+  const viewKey =
+    activePage ?? selectedInstance?.id ?? selectedProject?.bucketName ?? 'dashboard';
+
   return (
-    <Layout>
-      {activePage === 'db' ? (
-        <DatabaseDetails onBack={handleBack} />
-      ) : activePage === 'dns' ? (
-        <DnsDetails onBack={handleBack} />
-      ) : selectedInstance ? (
-        <InstanceDetails
-          instance={selectedInstance}
-          onBack={handleBack}
-        />
-      ) : selectedProject ? (
-        <BucketDetails
-          project={selectedProject}
-          onBack={handleBack}
-        />
-      ) : (
-        <Dashboard
-          onViewInstance={(instance) => setSelectedInstance(instance)}
-          onViewProject={(project) => setSelectedProject(project)}
-          onNavigate={handleNavigate}
-          experiences={experiences}
-          experiencesLoading={experiencesLoading}
-          experiencesError={experiencesError}
-          projects={projects}
-          projectsLoading={projectsLoading}
-          projectsError={projectsError}
-        />
-      )}
+    <Layout activeServiceId={activeServiceId} onServiceOpen={handleNavigate} onLogoClick={handleBack}>
+      <div key={viewKey} className="animate-view-enter">
+        {activePage === 'db' ? (
+          <DatabaseDetails onBack={handleBack} />
+        ) : activePage === 'dns' ? (
+          <DnsDetails onBack={handleBack} />
+        ) : activePage === 'iam' ? (
+          <IAMDetails onBack={handleBack} />
+        ) : selectedInstance ? (
+          <InstanceDetails instance={selectedInstance} onBack={handleBack} />
+        ) : selectedProject ? (
+          <BucketDetails project={selectedProject} onBack={handleBack} />
+        ) : (
+          <Dashboard
+            onViewInstance={(instance) => setSelectedInstance(instance)}
+            onViewProject={(project) => setSelectedProject(project)}
+            onNavigate={handleNavigate}
+            experiences={experiences}
+            experiencesLoading={experiencesLoading}
+            experiencesError={experiencesError}
+            projects={projects}
+            projectsLoading={projectsLoading}
+            projectsError={projectsError}
+          />
+        )}
+      </div>
     </Layout>
   );
 };

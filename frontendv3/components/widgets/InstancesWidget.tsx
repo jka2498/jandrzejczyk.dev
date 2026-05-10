@@ -1,7 +1,8 @@
 import React from 'react';
 import { Experience } from '../../types';
 import Card from '../Card';
-import { Loader2, AlertCircle } from 'lucide-react';
+import { StatusDot } from '../ui/Pills';
+import { AlertCircle } from 'lucide-react';
 
 interface EC2WidgetProps {
   onRowClick?: (experience: Experience) => void;
@@ -47,16 +48,21 @@ const EC2Widget: React.FC<EC2WidgetProps> = ({ onRowClick, experiences, loading,
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800">
-              {loading && (
-                 <tr>
-                    <td colSpan={6} className="p-8 text-center text-gray-500">
-                        <div className="flex flex-col items-center gap-2">
-                             <Loader2 className="animate-spin" size={24} />
-                             <span>Loading instances...</span>
-                        </div>
-                    </td>
-                 </tr>
-              )}
+              {loading && Array.from({ length: 3 }).map((_, i) => (
+                <tr key={`skeleton-${i}`} aria-hidden>
+                  <td className="p-3"><div className="h-3 w-32 bg-slate-700/40 rounded" /></td>
+                  <td className="p-3"><div className="h-3 w-48 bg-slate-700/40 rounded" /></td>
+                  <td className="p-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2.5 h-2.5 rounded-full bg-slate-700/40" />
+                      <div className="h-3 w-16 bg-slate-700/40 rounded" />
+                    </div>
+                  </td>
+                  <td className="p-3"><div className="h-3 w-24 bg-slate-700/40 rounded" /></td>
+                  <td className="p-3"><div className="h-3 w-20 bg-slate-700/40 rounded" /></td>
+                  <td className="p-3"><div className="h-3 w-28 bg-slate-700/40 rounded" /></td>
+                </tr>
+              ))}
               
               {error && (
                  <tr>
@@ -79,9 +85,7 @@ const EC2Widget: React.FC<EC2WidgetProps> = ({ onRowClick, experiences, loading,
                   <td className="p-3 text-gray-300 font-mono text-xs">{exp.id} <span className="text-gray-500">({exp.company})</span></td>
                   <td className="p-3">
                     <div className="flex items-center gap-2">
-                        {exp.state === 'running' && <span className="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>}
-                        {exp.state === 'stopped' && <span className="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>}
-                        {exp.state === 'terminated' && <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>}
+                        <StatusDot state={exp.state} />
                         <span className="capitalize">{exp.state}</span>
                     </div>
                   </td>

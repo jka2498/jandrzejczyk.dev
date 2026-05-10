@@ -26,18 +26,22 @@ const CostExplorerWidget: React.FC = () => {
             </div>
         </div>
 
-        <div className="h-[200px] w-full -ml-4">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={SKILL_DATA} margin={{ top: 5, right: 0, left: 0, bottom: 5 }}>
+        <div className="h-[220px] w-full -ml-4" style={{ minHeight: 220 }}>
+          <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
+            <BarChart data={SKILL_DATA} margin={{ top: 5, right: 8, left: 0, bottom: 18 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#374151" />
-              <XAxis 
-                dataKey="name" 
-                tick={{ fill: '#9ca3af', fontSize: 10 }} 
-                axisLine={false} 
-                tickLine={false} 
+              <XAxis
+                dataKey="name"
+                tick={{ fill: '#9ca3af', fontSize: 10 }}
+                axisLine={false}
+                tickLine={false}
+                interval={0}
+                angle={-25}
+                dy={8}
+                height={28}
               />
-              <YAxis 
-                hide 
+              <YAxis
+                hide
                 domain={[0, 100]}
               />
               <Tooltip 

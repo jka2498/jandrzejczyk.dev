@@ -1,7 +1,7 @@
 import React from 'react';
 import { Project } from '../../types';
 import Card from '../Card';
-import { Folder, Search, Loader2 } from 'lucide-react';
+import { Folder, Search } from 'lucide-react';
 
 interface S3WidgetProps {
   onProjectClick?: (project: Project) => void;
@@ -28,14 +28,15 @@ const S3Widget: React.FC<S3WidgetProps> = ({ onProjectClick, projects, loading, 
         </div>
         
         <ul className="divide-y divide-gray-800 border border-gray-700 rounded bg-[#0f1117] min-h-[100px]">
-          {loading && (
-             <li className="p-8 flex justify-center text-gray-500">
-                  <div className="flex items-center gap-2">
-                       <Loader2 className="animate-spin" size={20} />
-                       <span>Loading buckets...</span>
-                  </div>
-             </li>
-          )}
+          {loading && Array.from({ length: 3 }).map((_, i) => (
+            <li key={`skeleton-${i}`} aria-hidden className="p-3 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-[18px] h-[18px] rounded bg-slate-700/40" />
+                <div className="h-3 w-44 bg-slate-700/40 rounded" />
+              </div>
+              <div className="h-4 w-12 bg-slate-700/40 rounded" />
+            </li>
+          ))}
 
           {error && (
              <li className="p-8 flex justify-center text-red-400">

@@ -118,3 +118,65 @@ export interface HostedZone {
   type: 'Public' | 'Private';
   records: DnsRecord[];
 }
+
+export interface IamGroup {
+  name: string;
+  members: number;
+  joined: string;
+}
+
+export interface IamPolicy {
+  name: string;
+  type: 'AWS managed' | 'Customer managed' | 'Inline';
+  attached: string;
+  perms: 'Full' | 'ReadWrite' | 'ReadOnly';
+}
+
+export interface IamAccessKey {
+  id: string;
+  created: string;
+  lastUsed: string;
+  status: 'Active' | 'Inactive';
+  href?: string;
+}
+
+export interface IamProfile {
+  userName: string;
+  userArn: string;
+  accountId: string;
+  created: string;
+  location: string;
+  languages: string[];
+  summary: string;
+  groups: IamGroup[];
+  policies: IamPolicy[];
+  accessKeys: IamAccessKey[];
+}
+
+export interface EducationSchemaTable {
+  name: string;
+  result: string;
+  credits: string;
+}
+
+export interface EducationSchema {
+  name: string;
+  type: string;
+  institution: string;
+  period: string;
+  grade: string;
+  tables: EducationSchemaTable[];
+}
+
+export interface EducationCluster {
+  dbIdentifier: string;
+  engine: string;
+  instanceClass: string;
+  status: 'available' | 'stopped';
+  endpoint: string;
+  port: number;
+  storage: string;
+  multiAZ: boolean;
+  backupRetention: string;
+  schemas: EducationSchema[];
+}

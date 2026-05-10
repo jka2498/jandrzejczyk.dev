@@ -20,11 +20,11 @@ const InfoModal: React.FC<InfoModalProps> = ({ open, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 animate-scrim-enter"
       onClick={onClose}
     >
       <div
-        className="bg-[#161e2d] border border-slate-700 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
+        className="bg-[#161e2d] border border-slate-700 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto animate-modal-enter"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}

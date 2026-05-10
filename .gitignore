@@ -6,6 +6,7 @@
 
 # Maven
 */target/
+**/target/
 *.log
 
 # Python
@@ -24,3 +25,23 @@ build/
 # OS-specific
 .DS_Store
 Thumbs.db
+
+# Tooling caches / artifacts
+.claude/
+.playwright-mcp/
+.design-pkg/
+
+# CDK
+infra/cdk.context.json
+infra/cdk.out/
+
+# Frontend build
+frontendv3/dist/
+frontendv3/node_modules/
+
+# Maven non-default artifacts
+services/api/**/dependency-reduced-pom.xml
+
+# Local screenshot scratch
+*.png
+!frontendv3/public/**/*.png

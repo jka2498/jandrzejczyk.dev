@@ -3,7 +3,11 @@ import Card from '../Card';
 import { useCv } from '../../hooks/useCv';
 import { Shield, Users, Key, AlertTriangle, Download, Linkedin, Github, ExternalLink, Loader2 } from 'lucide-react';
 
-const IAMWidget: React.FC = () => {
+interface IAMWidgetProps {
+  onOpenDetails?: () => void;
+}
+
+const IAMWidget: React.FC<IAMWidgetProps> = ({ onOpenDetails }) => {
   const { cvUrl, loading, loadCvUrl } = useCv();
 
   const handleDownload = async (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -19,9 +23,18 @@ const IAMWidget: React.FC = () => {
   };
 
   return (
-    <Card 
+    <Card
         title="IAM Security (About)"
         headerAction={
+            <>
+            {onOpenDetails && (
+              <button
+                onClick={onOpenDetails}
+                className="text-[11px] text-cyan-400 hover:text-cyan-300 hover:underline cursor-pointer"
+              >
+                View user
+              </button>
+            )}
             <a
                 href={cvUrl || "#"}
                 download={cvUrl ? undefined : "CV.pdf"} // If it's a signed URL, let browser handle headers, else fallback
@@ -35,17 +48,21 @@ const IAMWidget: React.FC = () => {
                 {loading ? <Loader2 size={12} className="animate-spin" /> : <Download size={15} />}
                 <span>CV Report</span>
             </a>
+            </>
         }
     >
       <div className="space-y-4">
         
         <div className="flex items-center gap-4 bg-[#0f1117] p-3 rounded border border-gray-700">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold text-lg">
+            <div
+                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0"
+                style={{ background: 'linear-gradient(135deg, #fb923c 0%, #ea580c 100%)' }}
+            >
                 JA
             </div>
-            <div>
-                <div className="text-sm font-bold text-white">Jan Andrzejczyk</div>
-                <div className="text-xs text-gray-400">Account ID: 11-2345-6789</div>
+            <div className="min-w-0">
+                <div className="text-sm font-bold text-white">jan.andrzejczyk</div>
+                <div className="text-[11px] text-gray-500 font-mono">1024-7593-0512</div>
             </div>
             <div className="ml-auto text-xs bg-green-900/30 text-green-400 px-2 py-0.5 rounded border border-green-800">
                 Active

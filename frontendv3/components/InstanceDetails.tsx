@@ -1,6 +1,27 @@
 import React, { useState } from 'react';
+import {
+  ArrowLeft,
+  ChevronDown,
+  Copy,
+  Server,
+  Activity,
+  Key,
+  CheckCircle2,
+  Search,
+} from 'lucide-react';
+import Card from './Card';
+import { Breadcrumbs, TabBar, KeyValueGrid } from './ui/Layout';
+import { PrimaryButton, SecondaryButton } from './ui/Buttons';
+import { Badge, StatusDot } from './ui/Pills';
+import MetricChart, { MetricPattern } from './ui/MetricChart';
 import { Experience } from '../types';
-import { ArrowLeft, RefreshCw, Copy, ExternalLink, Info, CheckCircle2, ChevronDown, ChevronUp, Search } from 'lucide-react';
+
+const INSTANCE_METRICS: { title: string; pattern: MetricPattern }[] = [
+  { title: 'CPU Utilization',  pattern: 'cpu' },
+  { title: 'Network In',       pattern: 'network' },
+  { title: 'Disk Reads',       pattern: 'disk' },
+  { title: 'Status Check',     pattern: 'status' },
+];
 
 interface InstanceDetailsProps {
   instance: Experience;
@@ -8,258 +29,121 @@ interface InstanceDetailsProps {
 }
 
 const InstanceDetails: React.FC<InstanceDetailsProps> = ({ instance, onBack }) => {
-  const [activeTab, setActiveTab] = useState('Details');
-
-  const tabs = ['Details', 'Status and alarms', 'Monitoring', 'Security', 'Networking', 'Storage', 'Tags'];
+  const [tab, setTab] = useState('Details');
 
   return (
-    <div className="flex flex-col h-full text-sm">
-      {/* Breadcrumb & Header */}
-      <div className="mb-4">
-        <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-           <span className="hover:text-cyan-500 cursor-pointer" onClick={onBack}>Compute</span>
-           <span>{'>'}</span>
-           <span className="hover:text-cyan-500 cursor-pointer" onClick={onBack}>Instances</span>
-           <span>{'>'}</span>
-           <span className="text-gray-300">{instance.id}</span>
+    <div>
+      <Breadcrumbs
+        items={[
+          { label: 'Compute', onClick: onBack },
+          { label: 'Instances', onClick: onBack },
+          { label: instance.id },
+        ]}
+      />
+
+      <div className="flex items-start justify-between mb-4 flex-wrap gap-3">
+        <div className="min-w-0">
+          <h1 className="text-white text-xl font-bold truncate">{instance.role}</h1>
+          <div className="text-gray-400 text-[12px] mt-0.5">
+            {instance.company} · <span className="font-mono text-gray-500">{instance.id}</span>
+          </div>
         </div>
-        
-        <div className="flex justify-between items-start">
-            <div className="flex items-center gap-2">
-               <button onClick={onBack} className="p-1 hover:bg-slate-700 rounded-full mr-1">
-                   <ArrowLeft size={20} className="text-gray-400" />
-               </button>
-               <h1 className="text-2xl font-bold text-white">{instance.id}</h1>
-               <span className="text-gray-500">({instance.role})</span>
-            </div>
-            
-            <div className="flex gap-2">
-                <button className="bg-white text-gray-900 font-bold px-3 py-1.5 rounded text-xs border border-gray-300 hover:bg-gray-100">
-                    Connect
-                </button>
-                <button className="bg-white text-gray-900 font-bold px-3 py-1.5 rounded text-xs border border-gray-300 hover:bg-gray-100 flex items-center gap-1">
-                    Instance state <ChevronDown size={14} />
-                </button>
-                <button className="bg-white text-gray-900 font-bold px-3 py-1.5 rounded text-xs border border-gray-300 hover:bg-gray-100 flex items-center gap-1">
-                    Actions <ChevronDown size={14} />
-                </button>
-                <button className="bg-orange-600 text-white font-bold px-3 py-1.5 rounded text-xs hover:bg-orange-500 flex items-center gap-1">
-                    Launch instance <ChevronDown size={14} />
-                </button>
-            </div>
+        <div className="flex items-center gap-2">
+          <SecondaryButton onClick={onBack}><ArrowLeft size={11} />Back</SecondaryButton>
+          <SecondaryButton>Connect</SecondaryButton>
+          <SecondaryButton>Actions <ChevronDown size={11} /></SecondaryButton>
+          <PrimaryButton>Instance state</PrimaryButton>
         </div>
       </div>
 
-      {/* Instance Summary Bar */}
-      <div className="bg-[#0f1117] border border-gray-700 rounded-sm mb-6 p-4">
-         <div className="flex items-center gap-8 overflow-x-auto">
-             <div className="flex flex-col gap-1 min-w-[120px]">
-                 <span className="text-xs text-gray-400">Instance ID</span>
-                 <div className="flex items-center gap-1 text-gray-200">
-                     <span className="font-mono text-xs">{instance.id}</span>
-                     <Copy size={12} className="text-gray-500 cursor-pointer hover:text-white" />
-                 </div>
-             </div>
-             <div className="flex flex-col gap-1 min-w-[120px]">
-                 <span className="text-xs text-gray-400">Public IPv4 address</span>
-                 <div className="flex items-center gap-1 text-gray-200">
-                     <span className="font-mono text-xs">00.111.222.333</span>
-                     <ExternalLink size={12} className="text-cyan-500 cursor-pointer" />
-                 </div>
-             </div>
-             <div className="flex flex-col gap-1 min-w-[120px]">
-                 <span className="text-xs text-gray-400">Instance state</span>
-                 <div className="flex items-center gap-1.5">
-                     {instance.state === 'running' ? (
-                         <span className="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
-                     ) : (
-                         <span className="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
-                     )}
-                     <span className="text-gray-200 font-medium capitalize">{instance.state}</span>
-                 </div>
-             </div>
-             <div className="flex flex-col gap-1 min-w-[120px]">
-                 <span className="text-xs text-gray-400">Instance type</span>
-                 <span className="text-gray-200 font-mono text-xs">{instance.type}</span>
-             </div>
-             <div className="flex flex-col gap-1 min-w-[120px]">
-                 <span className="text-xs text-gray-400">Alarm status</span>
-                 <span className="text-gray-400 text-xs">No alarms</span>
-             </div>
-              <div className="flex flex-col gap-1 min-w-[120px]">
-                 <span className="text-xs text-gray-400">Availability Zone</span>
-                 <span className="text-gray-200 text-xs">{instance.az}</span>
-             </div>
-         </div>
-      </div>
+      <TabBar tabs={['Details', 'Achievements', 'Tags', 'Monitoring']} active={tab} onChange={setTab} />
 
-      {/* Tabs */}
-      <div className="border-b border-gray-700 mb-4 flex gap-6 text-sm">
-          {tabs.map(tab => (
-              <button 
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`pb-2 px-1 border-b-2 transition-colors ${activeTab === tab ? 'border-orange-500 text-orange-500 font-bold' : 'border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500'}`}
-              >
-                  {tab}
-              </button>
-          ))}
-      </div>
+      <div key={tab} className="animate-tab-enter">
+      {tab === 'Details' && (
+        <Card title="Instance summary" icon={<Server size={14} />} showKebab={false}>
+          <KeyValueGrid
+            cols={4}
+            items={[
+              ['Instance ID', <span className="font-mono">{instance.id}</span>],
+              [
+                'State',
+                <span className="inline-flex items-center gap-1.5">
+                  <StatusDot state={instance.state} />
+                  <span className="text-white capitalize">{instance.state}</span>
+                </span>,
+              ],
+              ['Instance type', <span className="font-mono">{instance.type}</span>],
+              ['Availability zone', <span className="font-mono">{instance.az}</span>],
+              ['Launch time', <span className="font-mono">{instance.launchTime}</span>],
+              ['Owner', instance.tags.Owner],
+              ['Platform', instance.tags.Platform],
+              [
+                'Environment',
+                <Badge tone={instance.tags.Environment === 'Production' ? 'green' : 'yellow'}>
+                  {instance.tags.Environment || '—'}
+                </Badge>,
+              ],
+            ]}
+          />
+        </Card>
+      )}
 
-      {/* Tab Content */}
-      <div className="flex-1">
-          {activeTab === 'Details' && (
-              <div className="space-y-6">
-                 
-                 {/* Instance Summary Collapsible Header Style */}
-                 <div className="text-lg font-bold text-white flex items-center gap-2 mb-2">
-                     <ChevronDown size={20} />
-                     <h2>Instance summary</h2>
-                     <span className="text-cyan-500 text-xs font-normal ml-2 cursor-pointer">Info</span>
-                 </div>
+      {tab === 'Achievements' && (
+        <Card title="Achievements (User data)" icon={<Activity size={14} />} showKebab={false}>
+          <ul className="space-y-2.5 text-[13px] text-gray-300">
+            {instance.description.map((d, i) => (
+              <li key={i} className="flex gap-2.5">
+                <span className="text-orange-400 mt-1 shrink-0">
+                  <CheckCircle2 size={12} />
+                </span>
+                <span className="leading-relaxed">{d}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
 
-                 {/* Key Value Grid */}
-                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-6 gap-x-12 px-2">
-                    {/* Column 1 */}
-                    <div className="space-y-4">
-                        <div>
-                            <div className="text-xs text-gray-500 mb-0.5">Instance ID</div>
-                            <div className="flex items-center gap-1 text-gray-200 text-xs font-mono">{instance.id} <Copy size={12} /></div>
-                        </div>
-                        <div>
-                            <div className="text-xs text-gray-500 mb-0.5">Role Name</div>
-                            <div className="text-sm text-gray-200">{instance.role}</div>
-                        </div>
-                        <div>
-                            <div className="text-xs text-gray-500 mb-0.5">Launch Time</div>
-                            <div className="text-sm text-gray-200">{instance.launchTime}</div>
-                        </div>
-                    </div>
+      {tab === 'Tags' && (
+        <Card
+          title="Tags"
+          icon={<Key size={14} />}
+          showKebab={false}
+          headerAction={
+            <>
+              <SecondaryButton>Manage tags</SecondaryButton>
+            </>
+          }
+        >
+          <div className="-mx-4 -mb-4 overflow-x-auto">
+            <table className="w-full text-[12px]">
+              <thead>
+                <tr className="text-left text-gray-500 border-b border-slate-700/80 bg-slate-900/30">
+                  <th className="px-4 py-2 font-semibold uppercase tracking-wide text-[10px] w-1/3">Key</th>
+                  <th className="px-4 py-2 font-semibold uppercase tracking-wide text-[10px]">Value</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-700/40">
+                {Object.entries(instance.tags).map(([k, v]) => (
+                  <tr key={k} className="hover:bg-slate-700/30">
+                    <td className="px-4 py-2.5 font-mono text-gray-300">{k}</td>
+                    <td className="px-4 py-2.5 text-white">{v}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
 
-                    {/* Column 2 */}
-                     <div className="space-y-4">
-                        <div>
-                            <div className="text-xs text-gray-500 mb-0.5">Public IPv4 address</div>
-                            <div className="text-sm text-cyan-500 cursor-pointer hover:underline">00.111.222.333</div>
-                        </div>
-                         <div>
-                            <div className="text-xs text-gray-500 mb-0.5">Private IP DNS name (IPv4 only)</div>
-                            <div className="text-sm text-gray-200 font-mono">ip-111-22-333-444.{instance.az}.internal</div>
-                        </div>
-                        <div>
-                            <div className="text-xs text-gray-500 mb-0.5">Instance type</div>
-                            <div className="text-sm text-gray-200 font-mono">{instance.type}</div>
-                        </div>
-                    </div>
-
-                    {/* Column 3 */}
-                     <div className="space-y-4">
-                        <div>
-                            <div className="text-xs text-gray-500 mb-0.5">Instance state</div>
-                            <div className="flex items-center gap-2">
-                                <span className={`w-2 h-2 rounded-full ${instance.state === 'running' ? 'bg-green-500' : 'bg-yellow-500'}`}></span>
-                                <span className="text-sm text-gray-200 capitalize">{instance.state}</span>
-                            </div>
-                        </div>
-                         <div>
-                            <div className="text-xs text-gray-500 mb-0.5">Network ID</div>
-                            <div className="text-sm text-cyan-500 cursor-pointer hover:underline">net-01a112a22b334cdd5</div>
-                        </div>
-                        <div>
-                            <div className="text-xs text-gray-500 mb-0.5">Subnet ID</div>
-                            <div className="text-sm text-cyan-500 cursor-pointer hover:underline">subnet-01a112a22b334cdd5</div>
-                        </div>
-                    </div>
-
-                    {/* Column 4 */}
-                    <div className="space-y-4">
-                        <div>
-                            <div className="text-xs text-gray-500 mb-0.5">Platform</div>
-                            <div className="text-sm text-gray-200">{instance.tags['Platform'] || 'Linux/UNIX'}</div>
-                        </div>
-                        <div>
-                            <div className="text-xs text-gray-500 mb-0.5">Image ID</div>
-                            <div className="text-sm text-cyan-500 cursor-pointer hover:underline">img-01a112a22b334cdd5</div>
-                        </div>
-                        <div>
-                            <div className="text-xs text-gray-500 mb-0.5">Monitoring</div>
-                            <div className="text-sm text-gray-200">Basic</div>
-                        </div>
-                    </div>
-                 </div>
-
-                 <hr className="border-gray-700 my-6" />
-
-                 {/* Role Description - Styled like User Data or Tags */}
-                 <div className="px-2">
-                     <div className="text-lg font-bold text-white flex items-center gap-2 mb-4">
-                        <ChevronDown size={20} />
-                        <h2>Work Experience Details</h2>
-                     </div>
-                     
-                     <div className="bg-[#161e2d] border border-gray-700 rounded p-4 font-mono text-xs text-gray-300">
-                        <div className="text-gray-500 mb-2"># User Data / Responsibilities</div>
-                        <ul className="space-y-3">
-                            {instance.description.map((bullet, idx) => (
-                                <li key={idx} className="flex gap-2">
-                                    <span className="text-orange-500 shrink-0">{'>'}</span>
-                                    <span className="leading-relaxed">{bullet}</span>
-                                </li>
-                            ))}
-                        </ul>
-                     </div>
-                 </div>
-
-              </div>
-          )}
-
-          {activeTab === 'Tags' && (
-              <div className="space-y-4">
-                 <div className="flex justify-between items-center mb-4">
-                    <div className="relative max-w-sm w-full">
-                        <input 
-                            type="text" 
-                            placeholder="Find tags by key or value" 
-                            className="w-full bg-[#0f1117] border border-gray-600 rounded px-3 py-1.5 pl-9 text-gray-300 focus:border-orange-500 focus:outline-none placeholder-gray-500" 
-                        />
-                        <Search className="absolute left-2.5 top-1.5 text-gray-500" size={16} />
-                    </div>
-                    <button className="bg-white text-gray-900 font-bold px-3 py-1.5 rounded text-xs border border-gray-300 hover:bg-gray-100">
-                        Manage tags
-                    </button>
-                 </div>
-
-                 <div className="border border-gray-700 rounded bg-[#0f1117] overflow-hidden">
-                    <table className="w-full text-left text-sm">
-                       <thead className="bg-slate-800 text-gray-400 font-semibold border-b border-gray-700">
-                         <tr>
-                           <th className="p-3 border-r border-gray-700 w-1/3">Key</th>
-                           <th className="p-3">Value</th>
-                         </tr>
-                       </thead>
-                       <tbody className="divide-y divide-gray-800">
-                         {Object.entries(instance.tags).map(([key, value]) => (
-                            <tr key={key} className="hover:bg-[#1f2937]">
-                               <td className="p-3 border-r border-gray-800 font-medium text-gray-300">{key}</td>
-                               <td className="p-3 text-gray-400">{value}</td>
-                            </tr>
-                         ))}
-                       </tbody>
-                    </table>
-                 </div>
-                 <div className="text-xs text-gray-500 mt-2">
-                    Tags help you categorize resources. You can apply tags to your instances, images, and other resources.
-                 </div>
-              </div>
-          )}
-          
-          {activeTab !== 'Details' && activeTab !== 'Tags' && (
-              <div className="flex flex-col items-center justify-center py-20 text-gray-500">
-                  <Info size={40} className="mb-4 opacity-50" />
-                  <p>No {activeTab.toLowerCase()} data available for this instance.</p>
-                  <button className="mt-4 text-cyan-500 hover:underline" onClick={() => setActiveTab('Details')}>Return to Details</button>
-              </div>
-          )}
+      {tab === 'Monitoring' && (
+        <Card title="CloudWatch metrics" icon={<Activity size={14} />} showKebab={false}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {INSTANCE_METRICS.map((m) => (
+              <MetricChart key={m.title} title={m.title} pattern={m.pattern} />
+            ))}
+          </div>
+        </Card>
+      )}
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { CheckCircle2, Calendar } from 'lucide-react';
 
 const HealthWidget: React.FC = () => {
   return (
-    <Card title="Cloud Health (Bio)" className="h-full">
+    <Card title="Cloud Health (Bio)" className="h-full" showKebab={false}>
       <div className="space-y-4">
         <div className="flex justify-between items-center pb-2 border-b border-gray-700">
             <span className="text-sm text-gray-300">Open issues</span>
